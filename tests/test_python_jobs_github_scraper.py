@@ -9,4 +9,10 @@ from marimo_job_scraper.scrapers.python_jobs_github_scraper import (
 
 @pytest.fixture
 def scraper() -> PythonJobsGithubScraper:
-    return PythonJobsGithubScraper
+    return PythonJobsGithubScraper()
+
+
+def test_returns_response(scraper):
+    response = scraper.fetch()
+    assert response.status_code == 200
+    assert "text/html" in response.headers["Content-Type"]
