@@ -14,9 +14,12 @@ class PythonJobsGithubScraper(JobScraper):
     def __init__(self: Self, base_url: str = "https://pythonjobs.github.io/"):
         """Class costructor."""
         super().__init__(base_url=base_url)
-    
+
     def fetch(self: Self) -> requests.Response:
-        
+        """Fetch response from url."""
+        response: requests.Response = requests.get(url=self.base_url)
+        response.raise_for_status()
+        return response
 
     def parse(self: Self, raw_html: requests.Response) -> list[dict]:
         """Parse html into a list of job dicts."""
