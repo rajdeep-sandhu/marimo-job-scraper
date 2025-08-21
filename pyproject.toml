@@ -1,0 +1,17 @@
+[project]
+name = "marimo-job-scraper"
+version = "0.1.0"
+description = "Simple job scraper using marimo"
+readme = "README.md"
+authors = [
+    { name = "rajdeep-sandhu", email = "168480080+rajdeep-sandhu@users.noreply.github.com" }
+]
+requires-python = ">=3.13.5"
+dependencies = []
+
+[project.scripts]
+marimo-job-scraper = "src:main"
+
+[build-system]
+requires = ["uv_build>=0.8.5,<0.9.0"]
+build-backend = "uv_build"
