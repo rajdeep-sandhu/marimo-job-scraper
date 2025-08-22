@@ -22,3 +22,8 @@ def test_parse_returns_list(scraper):
     response = scraper.fetch()
     jobs = scraper.parse(response)
     assert isinstance(jobs, list)
+
+def test_parse_none_returns_empty_list(scraper):
+    response = scraper.fetch()
+    jobs = scraper.parse(None)
+    assert jobs == []
