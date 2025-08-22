@@ -16,3 +16,8 @@ def test_fetch_returns_response(scraper):
     response = scraper.fetch()
     assert response.status_code == 200
     assert "text/html" in response.headers["Content-Type"]
+
+def test_parse_returns_list(scraper):
+    response = scraper.fetch()
+    jobs = response.parse()
+    assert isinstance(jobs, list)
