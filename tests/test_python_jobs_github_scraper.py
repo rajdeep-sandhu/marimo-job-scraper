@@ -12,7 +12,7 @@ def scraper() -> PythonJobsGithubScraper:
     return PythonJobsGithubScraper()
 
 
-def test_returns_response(scraper):
+def test_fetch_returns_response(scraper):
     response = scraper.fetch()
     assert response.status_code == 200
     assert "text/html" in response.headers["Content-Type"]
