@@ -51,4 +51,14 @@ class PythonJobsGithubScraper(JobScraper):
 
     def parse(self: Self, raw_html: Response) -> list[dict]:
         """Parse html into a list of job dicts."""
-        raise NotImplementedError
+
+        if (not raw_html) or (raw_html) is None:
+            return []
+
+        soup: BeautifulSoup = BeautifulSoup(raw_html.content, features="html.parser")
+        job_section: Tag = soup.find("section", class_="job_list")
+        job_cards: ResultSet = job_section.find_all("div", class_="job")
+
+        jobs: list[dict] = []
+
+        return jobs
