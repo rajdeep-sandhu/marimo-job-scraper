@@ -12,8 +12,8 @@ class HTTPClient:
     DEFAULT_TIMEOUT = 3.01
 
     @staticmethod
-    def fetch(url: str, timeout: float = DEFAULT_TIMEOUT):
-        """Fetch response from url."""
+    def get(url: str, timeout: float = DEFAULT_TIMEOUT):
+        """Get response from url."""
 
         # Define HTTPAdapter
         retry_strategy = Retry(
