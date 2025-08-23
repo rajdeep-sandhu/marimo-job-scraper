@@ -13,11 +13,13 @@ class HTTPClient:
     DEFAULT_TIMEOUT = 3.01
 
     @staticmethod
-    def get(url: str, retries: int = DEFAULT_RETRIES, timeout: float = DEFAULT_TIMEOUT):
+    def get(
+        url: str, retries: int = DEFAULT_RETRIES, timeout: float = DEFAULT_TIMEOUT
+    ) -> Response | None:
         """Get response from url."""
 
         # Define HTTPAdapter
-        retry_strategy = Retry(
+        retry_strategy: Retry = Retry(
             total=retries,
             status_forcelist=[
                 HTTPStatus.NOT_FOUND,
@@ -30,7 +32,7 @@ class HTTPClient:
             allowed_methods=[HTTPMethod.GET],
         )
 
-        adapter = HTTPAdapter(max_retries=retry_strategy)
+        adapter: HTTPAdapter = HTTPAdapter(max_retries=retry_strategy)
 
         # Get request
         with Session() as session:
