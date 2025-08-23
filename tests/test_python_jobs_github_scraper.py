@@ -20,7 +20,7 @@ def test_fetch_returns_response(scraper):
 
 def test_parse_returns_list(scraper):
     response = scraper.fetch()
-    jobs = scraper.parse(response)
+    jobs = scraper.parse(response.content)
     assert isinstance(jobs, list)
 
 
