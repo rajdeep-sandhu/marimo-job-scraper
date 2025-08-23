@@ -75,8 +75,6 @@ class PythonJobsGithubScraper(JobScraper):
             info_items: list[Tag] = job_card.find_all("span", class_="info")
             info: dict = {item.i["class"][0]: item.text.strip() for item in info_items}
 
-            logger.debug(info)
-
             # Set job_date to None if not in info or if not formatted as 'Tue, 23 Nov 2021'.
             job_date: datetime.date = None
             if info.get("i-calendar"):
@@ -100,8 +98,6 @@ class PythonJobsGithubScraper(JobScraper):
                     "data_tags": data_tags,
                 }
             )
-
-            logger.debug(jobs)
 
         return jobs
 
