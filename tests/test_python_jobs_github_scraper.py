@@ -25,6 +25,5 @@ def test_parse_returns_list(scraper):
 
 
 def test_parse_none_returns_empty_list(scraper):
-    response = scraper.fetch()
     jobs = scraper.parse(None)
     assert jobs == []
