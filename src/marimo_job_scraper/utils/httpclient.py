@@ -9,15 +9,16 @@ from requests.adapters import HTTPAdapter, Retry
 class HTTPClient:
     """Utility class for making HTTP requests with retry logic."""
 
+    DEFAULT_RETRIES = 3
     DEFAULT_TIMEOUT = 3.01
 
     @staticmethod
-    def get(url: str, timeout: float = DEFAULT_TIMEOUT):
+    def get(url: str, retries: int = DEFAULT_RETRIES, timeout: float = DEFAULT_TIMEOUT):
         """Get response from url."""
 
         # Define HTTPAdapter
         retry_strategy = Retry(
-            total=3,
+            total=retries,
             status_forcelist=[
                 HTTPStatus.NOT_FOUND,
                 HTTPStatus.TOO_MANY_REQUESTS,
