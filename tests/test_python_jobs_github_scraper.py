@@ -31,9 +31,9 @@ def test_fetch_returns_response(scraper):
     assert "text/html" in response.headers["Content-Type"]
 
 
-def test_parse_returns_list(scraper):
+def test_parse_returns_list(scraper, sample_html):
     response = scraper.fetch()
-    jobs = scraper.parse(response.content)
+    jobs = scraper.parse(sample_html)
     assert isinstance(jobs, list)
 
 
