@@ -32,3 +32,22 @@ def test_parse_job_card_returns_dict(scraper, sample_html):
     job_card: ResultSet = job_section.find("div", class_="job")
 
     assert isinstance(scraper._parse_job_card(job_card), dict)
+
+def test_scrape(monkeypatch, scraper, sample_html):
+    """
+    Test the scrape() method.
+    Mock fetch() and use sample_html.
+    """
+
+    class MockResponse:
+        content = sample_html
+
+    def mock_fetch():
+        return MockResponse()
+
+    monkeypatch.setattr(scraper, "fetch", mock_fetch)
+
+    jobs = scraper.scrape()
+    assert isinstance(jobs, list)
+    assert len(jobs) > 0
+    assert all(isinstance(job, dict) for job in jobs)
