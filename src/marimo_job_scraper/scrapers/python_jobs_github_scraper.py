@@ -62,7 +62,7 @@ class PythonJobsGithubScraper(JobScraper):
     def parse(self: Self, raw_html: str | bytes) -> list[dict]:
         """Parse html into a list of job dicts."""
 
-        if (not raw_html) or (raw_html) is None:
+        if (not raw_html) or (raw_html is None):
             return []
 
         # Get job_cards from html
@@ -71,10 +71,7 @@ class PythonJobsGithubScraper(JobScraper):
         job_cards: ResultSet = job_section.find_all("div", class_="job")
 
         # Parse job data into a list of dicts.
-        jobs: list[dict] = []
-
-        for job_card in job_cards:
-            jobs.append(self._parse_job_card(job_card))
+        jobs: list[dict] = [self._parse_job_card(job_card) for job_card in job_cards]
 
         return jobs
 
