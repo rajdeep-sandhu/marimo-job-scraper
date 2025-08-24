@@ -41,7 +41,6 @@ def test_parse_none_returns_empty_list(scraper):
     assert jobs == []
 
 
-def test_parse_returns_non_empty_list(scraper):
-    response = scraper.fetch()
-    jobs = scraper.parse(response.content)
+def test_parse_returns_non_empty_list(scraper, sample_html):
+    jobs = scraper.parse(sample_html)
     assert jobs != [], "jobs should not be an empty list."
