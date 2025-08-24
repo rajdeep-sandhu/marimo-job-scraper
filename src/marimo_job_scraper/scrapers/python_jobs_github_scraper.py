@@ -2,7 +2,7 @@
 import logging
 from datetime import datetime
 from http import HTTPMethod, HTTPStatus
-from typing import Self
+from typing import Any, Self
 
 import requests
 from bs4 import BeautifulSoup, ResultSet, Tag
@@ -25,6 +25,40 @@ class PythonJobsGithubScraper(JobScraper):
 
         return HTTPClient.get(url=self.base_url)
 
+    def _parse_job_card(self: Self, job_card: Tag) -> dict[Any]:
+        """Parse job_card into dict."""
+        logger.debug(type(job_card))
+
+        data_tags: list[str] = job_card.attrs.get("data-tags", "").strip().split(",")
+        link: str = f"{self.base_url[:-1]}{job_card.h1.a['href']}"
+        title: str = job_card.h1.a.text.strip()
+
+        # Parse info items
+        info_items: list[Tag] = job_card.find_all("span", class_="info")
+        info: dict = {item.i["class"][0]: item.text.strip() for item in info_items}
+
+        # Set job_date to None if not in info or if not formatted as 'Tue, 23 Nov 2021'.
+        job_date: datetime.date = None
+        if info.get("i-calendar"):
+            try:
+                job_date = datetime.strptime(
+                    info["i-calendar"].strip(), "%a, %d %b %Y"
+                ).date()
+            except ValueError:
+                job_date = None
+
+        detail: str = job_card.find("p", class_="detail").text.strip()
+
+        return {
+            "title": title,
+            "company": info.get("i-company", "").strip(),
+            "location": info.get("i-globe", "").strip(),
+            "tenure": info.get("i-chair", "").strip(),
+            "date": job_date,
+            "detail": detail,
+            "data_tags": data_tags,
+        }
+
     def parse(self: Self, raw_html: str | bytes) -> list[dict]:
         """Parse html into a list of job dicts."""
 
@@ -40,39 +74,7 @@ class PythonJobsGithubScraper(JobScraper):
         jobs: list[dict] = []
 
         for job_card in job_cards:
-            data_tags: list[str] = (
-                job_card.attrs.get("data-tags", "").strip().split(",")
-            )
-            link: str = f"{self.base_url[:-1]}{job_card.h1.a['href']}"
-            title: str = job_card.h1.a.text.strip()
-
-            # Parse info items
-            info_items: list[Tag] = job_card.find_all("span", class_="info")
-            info: dict = {item.i["class"][0]: item.text.strip() for item in info_items}
-
-            # Set job_date to None if not in info or if not formatted as 'Tue, 23 Nov 2021'.
-            job_date: datetime.date = None
-            if info.get("i-calendar"):
-                try:
-                    job_date = datetime.strptime(
-                        info["i-calendar"].strip(), "%a, %d %b %Y"
-                    ).date()
-                except ValueError:
-                    job_date = None
-
-            detail: str = job_card.find("p", class_="detail").text.strip()
-
-            jobs.append(
-                {
-                    "title": title,
-                    "company": info.get("i-company", "").strip(),
-                    "location": info.get("i-globe", "").strip(),
-                    "tenure": info.get("i-chair", "").strip(),
-                    "date": job_date,
-                    "detail": detail,
-                    "data_tags": data_tags,
-                }
-            )
+            jobs.append(self._parse_job_card(job_card))
 
         return jobs
 
