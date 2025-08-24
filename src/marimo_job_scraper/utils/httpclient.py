@@ -10,6 +10,7 @@ class HTTPClient:
     """Utility class for making HTTP requests with retry logic."""
 
     DEFAULT_RETRIES = 3
+    # DEFAULT_TIMEOUT should be slightly more than a multiple of 3.
     DEFAULT_TIMEOUT = 3.01
 
     @staticmethod
