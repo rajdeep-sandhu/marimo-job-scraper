@@ -26,7 +26,10 @@ class PythonJobsGithubScraper(JobScraper):
         return HTTPClient.get(url=self.base_url)
 
     def _parse_job_card(self: Self, job_card: Tag) -> dict[Any]:
-        """Parse job_card into dict."""
+        """
+        Parse job_card into dict.
+        Parsing logic is by necessity tightly coupled to the html structure of the site.
+        """
 
         data_tags: list[str] = job_card.attrs.get("data-tags", "").strip().split(",")
         link: str = f"{self.base_url[:-1]}{job_card.h1.a['href']}"
