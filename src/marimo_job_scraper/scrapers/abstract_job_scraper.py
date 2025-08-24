@@ -17,6 +17,6 @@ class JobScraper(ABC):
         """Parse html into a list of job dicts."""
 
     def scrape(self: Self) -> list[dict]:
-        """Scrape jobs and return a list of job dicts."""
-        raw_html: Any = self.fetch()
-        return self.parse(raw_html=raw_html)
+        """Convenience method to scrape jobs and return a list of job dicts."""
+        response: Any = self.fetch()
+        return self.parse(raw_html=response.content)
