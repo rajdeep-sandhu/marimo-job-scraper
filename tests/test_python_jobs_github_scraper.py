@@ -32,7 +32,6 @@ def test_fetch_returns_response(scraper):
 
 
 def test_parse_returns_list(scraper, sample_html):
-    response = scraper.fetch()
     jobs = scraper.parse(sample_html)
     assert isinstance(jobs, list)
 
