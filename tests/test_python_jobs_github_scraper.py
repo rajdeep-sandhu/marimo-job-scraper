@@ -3,6 +3,7 @@
 from pathlib import Path
 
 import pytest
+from bs4 import BeautifulSoup, ResultSet, Tag
 
 from marimo_job_scraper.scrapers.python_jobs_github_scraper import (
     PythonJobsGithubScraper,
@@ -13,9 +14,7 @@ from marimo_job_scraper.scrapers.python_jobs_github_scraper import (
 def sample_html() -> str:
     """Fixture to load the sample html file."""
     filename = "pythonjobsgithub_sample.html"
-    filepath: Path = (
-        Path(__file__).parent.parent / "tests" / "fixtures" / filename
-    )
+    filepath: Path = Path(__file__).parent.parent / "tests" / "fixtures" / filename
     with filepath.open("r", encoding="utf-8") as file:
         return file.read()
 
@@ -44,3 +43,12 @@ def test_parse_none_returns_empty_list(scraper):
 def test_parse_returns_non_empty_list(scraper, sample_html):
     jobs = scraper.parse(sample_html)
     assert jobs != [], "jobs should not be an empty list."
+
+
+def test_parse_job_card_returns_dict(scraper, sample_html):
+    # Get first job_card from html
+    soup: BeautifulSoup = BeautifulSoup(sample_html, features="html.parser")
+    job_section: Tag = soup.find("section", class_="job_list")
+    job_card: ResultSet = job_section.find("div", class_="job")
+
+    assert isinstance(scraper._parse_job_card(job_card), dict)
