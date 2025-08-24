@@ -10,6 +10,7 @@ from requests import Response, Session
 from requests.adapters import HTTPAdapter, Retry
 
 from marimo_job_scraper.scrapers.abstract_job_scraper import JobScraper
+from marimo_job_scraper.utils.httpclient import HTTPClient
 
 
 class PythonJobsGithubScraper(JobScraper):
@@ -22,8 +23,7 @@ class PythonJobsGithubScraper(JobScraper):
     def fetch(self: Self) -> Response | None:
         """Fetch response from url."""
 
-        return
-
+        return HTTPClient.get(url=self.base_url)
 
     def parse(self: Self, raw_html: str | bytes) -> list[dict]:
         """Parse html into a list of job dicts."""
