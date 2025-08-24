@@ -16,6 +16,10 @@ from marimo_job_scraper.utils.httpclient import HTTPClient
 class PythonJobsGithubScraper(JobScraper):
     """Concrete scraper for https://pythonjobs.github.io/."""
 
+    DEFAULT_RETRIES = 3
+    # DEFAULT_TIMEOUT should be slightly more than a multiple of 3.
+    DEFAULT_TIMEOUT = 3.01
+
     def __init__(self: Self, base_url: str = "https://pythonjobs.github.io/"):
         """Constructor."""
         super().__init__(base_url=base_url)
@@ -23,7 +27,11 @@ class PythonJobsGithubScraper(JobScraper):
     def fetch(self: Self) -> Response | None:
         """Fetch response from url."""
 
-        return HTTPClient.get(url=self.base_url)
+        return HTTPClient.get(
+            url=self.base_url,
+            retries=self.DEFAULT_RETRIES,
+            timeout=self.DEFAULT_TIMEOUT,
+        )
 
     def _parse_job_card(self: Self, job_card: Tag) -> dict[Any]:
         """
