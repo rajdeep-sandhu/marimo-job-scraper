@@ -17,7 +17,10 @@ class HTTPClient:
     def get(
         url: str, retries: int = DEFAULT_RETRIES, timeout: float = DEFAULT_TIMEOUT
     ) -> Response | None:
-        """Get response from url."""
+        """
+        Get response from url.
+        This is a static method as it does not require instance-specific state or behaviour.
+        """
 
         # Define HTTPAdapter
         retry_strategy: Retry = Retry(
