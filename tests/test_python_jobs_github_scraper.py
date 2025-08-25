@@ -33,6 +33,7 @@ def test_parse_job_card_returns_dict(scraper, sample_html):
 
     assert isinstance(scraper._parse_job_card(job_card), dict)
 
+
 def test_scrape(monkeypatch, scraper, sample_html):
     """
     Test the scrape() method.
@@ -46,6 +47,18 @@ def test_scrape(monkeypatch, scraper, sample_html):
         return MockResponse()
 
     monkeypatch.setattr(scraper, "fetch", mock_fetch)
+
+    jobs = scraper.scrape()
+    assert isinstance(jobs, list)
+    assert len(jobs) > 0
+    assert all(isinstance(job, dict) for job in jobs)
+
+
+@pytest.mark.integration
+def test_integration_live_fetch(scraper):
+    """
+    Test the scrape() method on live website.
+    """
 
     jobs = scraper.scrape()
     assert isinstance(jobs, list)
