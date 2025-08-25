@@ -40,7 +40,7 @@ def test_scrape(monkeypatch, scraper, sample_html):
     """
 
     class MockResponse:
-        content = sample_html
+        content = sample_html.encode("utf-8")
 
     def mock_fetch():
         return MockResponse()
