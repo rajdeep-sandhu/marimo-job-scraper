@@ -6,22 +6,24 @@ import requests
 from marimo_job_scraper.scrapers import JobScraper, PythonJobsGithubScraper
 from marimo_job_scraper.utils import HTTPClient
 
+def scrape_to_file(filepath: Path, scraper: JobScraper) -> None:
+    if filepath.exists():
+        print(f"{filepath.parts[-1]} already exists.")
+        return None
+    
+    response: requests.Response = scraper.fetch()
+    
+    with open(filepath, mode="w", encoding="utf-8") as f:
+        f.write(response.text)
+    print(f"Created {filepath.parts[-1]}.")
+    return None
 
 def main():
-    file_scrapers: dict = {"pythonjobsgithub_sample_download.html": PythonJobsGithubScraper()}
+    file_scrapers: dict = {"pythonjobsgithub_sample_download.html": PythonJobsGithubScraper}
 
-    for file, scraper in file_scrapers.items():
-        response: requests.Response = scraper.fetch()
-        # tests\fixtures\pythonjobsgithub_sample.html
-        file_path = Path(__file__).parent / file
-        print(file_path)
-
-        if not file_path.exists():
-            with open(file_path, mode="w", encoding="utf-8") as f:
-                f.write(response.text) 
-            print(f"Created {file}.")
-        else:
-            print(f"{file_path} already exists.")
+    for file, ScraperClass in file_scrapers.items():
+        filepath = Path(__file__).parent / file
+        scrape_to_file(filepath=filepath, scraper=ScraperClass())
 
 
 if __name__ == "__main__":
