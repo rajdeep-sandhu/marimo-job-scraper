@@ -12,9 +12,7 @@ def scrape_to_file(filepath: Path, scraper: JobScraper) -> None:
         return None
     
     response: requests.Response = scraper.fetch()
-    
-    with open(filepath, mode="w", encoding="utf-8") as f:
-        f.write(response.text)
+    filepath.write_text(data=response.text, encoding="utf-8")
     print(f"Created {filepath.parts[-1]}.")
     return None
 
