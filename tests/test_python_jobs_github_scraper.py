@@ -53,14 +53,19 @@ def test_scrape(monkeypatch, scraper, sample_html):
             self.text = text
             self.status_code = status_code
             self.headers = headers or {"Content-Type": "text/html; charset=utf-8"}
-        
+
         @property
         def content(self):
             """Return the raw content as bytes."""
             return self._content
 
     def mock_fetch():
-        return MockResponse()
+        return MockResponse(
+            content=sample_html.encode("utf-8"),
+            text=sample_html,
+            status_code=200,
+            headers={"Content-Type": "text/html; charset=utf-8"},
+        )
 
     monkeypatch.setattr(scraper, "fetch", mock_fetch)
 
