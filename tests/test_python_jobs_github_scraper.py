@@ -1,6 +1,7 @@
 # test_python_jobs_github_scraper.py
 
 import pytest
+import requests
 from bs4 import BeautifulSoup, ResultSet, Tag
 
 
@@ -41,7 +42,22 @@ def test_scrape(monkeypatch, scraper, sample_html):
     """
 
     class MockResponse:
-        content = sample_html.encode("utf-8")
+        def __init__(
+            self,
+            content: bytes = b"",
+            text: str = "",
+            status_code: int = 200,
+            headers: dict = None,
+        ):
+            self._content = content
+            self.text = text
+            self.status_code = status_code
+            self.headers = headers or {"Content-Type": "text/html; charset=utf-8"}
+        
+        @property
+        def content(self):
+            """Return the raw content as bytes."""
+            return self._content
 
     def mock_fetch():
         return MockResponse()
