@@ -14,8 +14,13 @@ def sample_html() -> str:
     """Fixture to load the sample html file."""
     filename = "pythonjobsgithub_sample.html"
     filepath: Path = Path(__file__).parent / "fixtures" / filename
-    with filepath.open("r", encoding="utf-8") as file:
-        return file.read()
+
+    if not filepath.exists():
+        raise FileNotFoundError(f"Fixture file not found: {filepath}")
+
+    content = filepath.read_text(encoding="utf-8")
+
+    return content
 
 
 @pytest.fixture
